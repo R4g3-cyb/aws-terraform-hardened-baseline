@@ -69,9 +69,9 @@ resource "aws_route_table_association" "asociacion_publica" {
 # ==============================================================================
 
 resource "aws_cloudwatch_log_group" "logs" {
-  name = "logs"
-  kms_key_id        = aws_kms_key.example.arn   
-  retention_in_days = 365                    
+  name              = "logs"
+  kms_key_id        = aws_kms_key.example.arn
+  retention_in_days = 365
 }
 
 resource "aws_iam_role" "flowlog" {
@@ -106,7 +106,7 @@ resource "aws_iam_role_policy" "test_policy" {
           "logs:PutLogEvents",
           "logs:DescribeLogGroups",
           "logs:DescribeLogStreams",
-        
+
         ]
         Effect   = "Allow"
         Resource = "${aws_cloudwatch_log_group.logs.arn}:*"
@@ -127,7 +127,7 @@ resource "aws_flow_log" "example" {
 # ==============================================================================
 
 resource "aws_default_security_group" "default" {
-  vpc_id = aws_vpc.vpc_principal.id 
+  vpc_id = aws_vpc.vpc_principal.id
 }
 
 module "mi_sg" {
@@ -171,9 +171,9 @@ resource "aws_kms_key_policy" "example" {
 # ==============================================================================
 
 resource "aws_s3_bucket" "bucket_privado" {
-#checkov:skip=CKV2_AWS_62: Practica de producción, no aplica a seguridad
-#checkov:skip=CKV2_AWS_61: Practica de producción, no aplica a seguridad
-#checkov:skip=CKV_AWS_144: Practica de producción, no aplica a seguridad
+  #checkov:skip=CKV2_AWS_62: Practica de producción, no aplica a seguridad
+  #checkov:skip=CKV2_AWS_61: Practica de producción, no aplica a seguridad
+  #checkov:skip=CKV_AWS_144: Practica de producción, no aplica a seguridad
   bucket_prefix = "lab-privado-hardened-"
   force_destroy = true
 
@@ -184,9 +184,9 @@ resource "aws_s3_bucket" "bucket_privado" {
 }
 
 resource "aws_s3_bucket" "logging" {
-#checkov:skip=CKV2_AWS_62: Practica de producción, no aplica a seguridad
-#checkov:skip=CKV2_AWS_61: Practica de producción, no aplica a seguridad
-#checkov:skip=CKV_AWS_144: Practica de producción, no aplica a seguridad
+  #checkov:skip=CKV2_AWS_62: Practica de producción, no aplica a seguridad
+  #checkov:skip=CKV2_AWS_61: Practica de producción, no aplica a seguridad
+  #checkov:skip=CKV_AWS_144: Practica de producción, no aplica a seguridad
   bucket_prefix = "access-logs-"
   force_destroy = true
 }
@@ -194,15 +194,15 @@ resource "aws_s3_bucket" "logging" {
 data "aws_iam_policy_document" "logging_bucket_policy" {
   statement {
     principals {
-      identifiers = ["logging.s3.amazonaws.com"]  
+      identifiers = ["logging.s3.amazonaws.com"]
       type        = "Service"
     }
-    actions   = ["s3:PutObject"]                   
-    resources = ["${aws_s3_bucket.logging.arn}/*"] 
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.logging.arn}/*"]
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]  
+      values   = [data.aws_caller_identity.current.account_id]
     }
   }
 }
@@ -213,9 +213,9 @@ resource "aws_s3_bucket_policy" "logging" {
 }
 
 resource "aws_s3_bucket_logging" "bucket_privado_logging" {
-  bucket        = aws_s3_bucket.bucket_privado.id   
-  target_bucket = aws_s3_bucket.logging.id          
-  target_prefix = "log/"                            
+  bucket        = aws_s3_bucket.bucket_privado.id
+  target_bucket = aws_s3_bucket.logging.id
+  target_prefix = "log/"
 }
 
 resource "aws_s3_bucket_public_access_block" "bloqueo_publico_s3" {
@@ -241,7 +241,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cifrado_s3" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "aws:kms"
+      sse_algorithm     = "aws:kms"
       kms_master_key_id = aws_kms_key.example.arn
     }
   }
@@ -252,7 +252,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "cifrado_s3_2" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "aws:kms"
+      sse_algorithm     = "aws:kms"
       kms_master_key_id = aws_kms_key.example.arn
     }
   }
@@ -294,12 +294,12 @@ data "aws_ami" "ubuntu_latest" {
 }
 
 resource "aws_instance" "servidor_prueba" {
-#checkov:skip=CKV2_AWS_41: Una ec2 es mas segura sin un rol iam porque no tiene credenciales que puedan ser comprometidas
-#checkov:skip=CKV_AWS_135: Un EBS optimizado no es importante para la seguridad
+  #checkov:skip=CKV2_AWS_41: Una ec2 es mas segura sin un rol iam porque no tiene credenciales que puedan ser comprometidas
+  #checkov:skip=CKV_AWS_135: Un EBS optimizado no es importante para la seguridad
   ami                         = data.aws_ami.ubuntu_latest.id
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.subred_publica.id
-  vpc_security_group_ids = [module.mi_sg.sg_id]
+  vpc_security_group_ids      = [module.mi_sg.sg_id]
   associate_public_ip_address = false
   monitoring                  = true
 
