@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: 3.12
       - name: Test with Checkov
         id: checkov
         uses: bridgecrewio/checkov-action@master
