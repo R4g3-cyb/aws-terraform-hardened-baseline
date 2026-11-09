@@ -3,7 +3,7 @@
 [![Terraform](https://img.shields.io/badge/IaC-Terraform-623CE4?logo=terraform&logoColor=white)](https://www.terraform.io/)
 [![AWS](https://img.shields.io/badge/Cloud-AWS-232F3E?logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
 [![Scanned by Checkov](https://img.shields.io/badge/Scanned_by-Checkov-6C47FF?logo=bridgecrew&logoColor=white)](https://www.checkov.io/)
-[![Checkov CI](https://github.com/R4g3-cyb/aws-terraform-nginx-vpc/actions/workflows/checkov.yml/badge.svg)](https://github.com/R4g3-cyb/aws-terraform-nginx-vpc/actions/workflows/checkov.yml)
+[![Checkov CI](https://github.com/R4g3-cyb/aws-terraform-hardened-baseline/actions/workflows/checkov.yml/badge.svg)](https://github.com/R4g3-cyb/aws-terraform-hardened-baseline/actions/workflows/checkov.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **ES** — Este repositorio define, como Infraestructura como Código (Terraform), una **base de infraestructura endurecida en AWS**: una VPC con subred pública, una instancia EC2 bastionada y almacenamiento S3 cifrado, todo **auditado automáticamente con Checkov en cada push** mediante GitHub Actions (modo *hard-fail*). El objetivo no es solo que funcione, sino que cada recurso aplique controles de seguridad explícitos y defendibles: **mínimo privilegio, mínima exposición, cifrado en reposo y trazabilidad**.
